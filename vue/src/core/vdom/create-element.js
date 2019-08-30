@@ -51,6 +51,7 @@ export function _createElement (
   children?: any,
   normalizationType?: number
 ): VNode | Array<VNode> {
+  // 不允许data是响应式的
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
@@ -87,6 +88,7 @@ export function _createElement (
     data.scopedSlots = { default: children[0] }
     children.length = 0
   }
+  // children数组处理 由于 Virtual DOM 实际上是一个树状结构，每一个 VNode 可能会有若干个子节点，这些子节点应该也是 VNode 的类型。_createElement 接收的第 4 个参数 children 是任意类型的，因此我们需要把它们规范成 VNode 类型
   if (normalizationType === ALWAYS_NORMALIZE) {
     children = normalizeChildren(children)
   } else if (normalizationType === SIMPLE_NORMALIZE) {
@@ -103,6 +105,7 @@ export function _createElement (
         undefined, undefined, context
       )
     } else if (isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+      // 组件的情况下
       // component
       vnode = createComponent(Ctor, data, context, children, tag)
     } else {
@@ -115,6 +118,7 @@ export function _createElement (
       )
     }
   } else {
+    //组件
     // direct component options / constructor
     vnode = createComponent(tag, data, context, children)
   }

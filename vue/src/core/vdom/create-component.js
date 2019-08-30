@@ -44,6 +44,7 @@ const componentVNodeHooks = {
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
+      // 通过vnode创建子类
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance
@@ -109,10 +110,12 @@ export function createComponent (
     return
   }
 
+  // baseCtor = Vue
   const baseCtor = context.$options._base
 
   // plain options object: turn it into a constructor
   if (isObject(Ctor)) {
+    // 获得子类构造器 基于Vue
     Ctor = baseCtor.extend(Ctor)
   }
 
@@ -225,11 +228,13 @@ export function createComponentInstanceForVnode (
 
 function installComponentHooks (data: VNodeData) {
   const hooks = data.hook || (data.hook = {})
+  // hooksToMerge是定义了hooks的对象的keys数组,然后跟传入的数据中hook去混合，保证一定有那些hook
   for (let i = 0; i < hooksToMerge.length; i++) {
     const key = hooksToMerge[i]
     const existing = hooks[key]
     const toMerge = componentVNodeHooks[key]
     if (existing !== toMerge && !(existing && existing._merged)) {
+      // mergeHook => componentVNodeHooks[key](), hooks[key](), _merged = true
       hooks[key] = existing ? mergeHook(toMerge, existing) : toMerge
     }
   }

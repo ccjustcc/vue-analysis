@@ -15,6 +15,7 @@ import VNode, { createEmptyVNode } from '../vdom/vnode'
 
 import { isUpdatingChildComponent } from './lifecycle'
 
+// 挂载createElemnt用来把模板转化成render函数
 export function initRender (vm: Component) {
   vm._vnode = null // the root of the child tree
   vm._staticTrees = null // v-once cached trees
@@ -80,6 +81,7 @@ export function renderMixin (Vue: Class<Component>) {
     // render self
     let vnode
     try {
+      // vm._renderProxy is this in production
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)

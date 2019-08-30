@@ -14,6 +14,7 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+// mount存起来 => 原来的MOUNT做啥 原来的mount定义在
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
@@ -33,6 +34,7 @@ Vue.prototype.$mount = function (
   // resolve template/el and convert to render function
   if (!options.render) {
     let template = options.template
+    //  有template就用template  
     if (template) {
       if (typeof template === 'string') {
         if (template.charAt(0) === '#') {
@@ -54,20 +56,23 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {
+      // 没有就用element 
       template = getOuterHTML(el)
     }
+    // 生成render
     if (template) {
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
         mark('compile')
       }
-
+      // 生成render方法 compileToFunctions***
       const { render, staticRenderFns } = compileToFunctions(template, {
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
+      // render 和 staticRenderFns 赋值 staticRenderFns 做啥的 TODO?
       options.render = render
       options.staticRenderFns = staticRenderFns
 
@@ -78,6 +83,8 @@ Vue.prototype.$mount = function (
       }
     }
   }
+
+  // 原本mount方法调用
   return mount.call(this, el, hydrating)
 }
 
@@ -95,6 +102,7 @@ function getOuterHTML (el: Element): string {
   }
 }
 
+// 静态方法compile用来干啥的
 Vue.compile = compileToFunctions
 
 export default Vue
