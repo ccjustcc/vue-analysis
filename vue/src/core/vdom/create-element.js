@@ -51,6 +51,7 @@ export function _createElement (
   children?: any,
   normalizationType?: number
 ): VNode | Array<VNode> {
+  // 生成vnode
   // 不允许data是响应式的
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
@@ -95,6 +96,7 @@ export function _createElement (
     children = simpleNormalizeChildren(children)
   }
   let vnode, ns
+  // 组件和普通的html的生成vnode在这里
   if (typeof tag === 'string') {
     let Ctor
     ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)

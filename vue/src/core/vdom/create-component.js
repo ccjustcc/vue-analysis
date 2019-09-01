@@ -44,11 +44,12 @@ const componentVNodeHooks = {
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
-      // 通过vnode创建子类
+      // 通过vnode创建子类 new Ctor() _init调用
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance
       )
+      // 没有child.el 无，不自动调用$mount,这里手动调用
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     }
   },
@@ -99,7 +100,7 @@ const componentVNodeHooks = {
 
 const hooksToMerge = Object.keys(componentVNodeHooks)
 
-export function createComponent (
+export function createComponent ( // 定义组件vnode中带子类和其他的各种hooks etc
   Ctor: Class<Component> | Function | Object | void,
   data: ?VNodeData,
   context: Component,

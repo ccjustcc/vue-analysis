@@ -1,5 +1,5 @@
 /* @flow */
-
+// 这是build的时候主入口文件？ new vue
 import config from 'core/config'
 import { warn, cached } from 'core/util/index'
 import { mark, measure } from 'core/util/perf'

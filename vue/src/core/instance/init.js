@@ -35,6 +35,8 @@ export function initMixin (Vue: Class<Component>) {
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
+      // 这里的options={...,parentinstance,parentVnode}
+      // child.option添加parentinstance,parentVnode
     } else {
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor),
@@ -50,6 +52,7 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
+    // 其中就有子类和父类vue关系挂钩等操作
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
@@ -66,7 +69,8 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
-    if (vm.$options.el) {
+    if (vm.$options.el) { // 有element参数情况下 此时的el是个基本数据类型而已,不是获取到dom第一个
+      // 调用挂载
       vm.$mount(vm.$options.el)
     }
   }

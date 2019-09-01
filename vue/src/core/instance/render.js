@@ -31,6 +31,7 @@ export function initRender (vm: Component) {
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   // normalization is always applied for the public version, used in
   // user-written render functions.
+  //  vnode = render.call(vm._renderProxy, vm.$createElement) 这里调用了
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 
   // $attrs & $listeners are exposed for easier HOC creation.
@@ -82,6 +83,7 @@ export function renderMixin (Vue: Class<Component>) {
     let vnode
     try {
       // vm._renderProxy is this in production
+      // vm.$createElement = createElemnt
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)

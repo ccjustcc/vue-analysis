@@ -27,7 +27,8 @@ export function initLifecycle (vm: Component) {
   // locate first non-abstract parent
   let parent = options.parent
   if (parent && !options.abstract) {
-    while (parent.$options.abstract && parent.$parent) {
+    // 啥是抽象组件
+    while (parent.$options.abstract && parent.$parent) { // 有几个抽象组件就绕过几个抽象组件，子类挂在到非抽象父类上的父子关系
       parent = parent.$parent
     }
     parent.$children.push(vm)
@@ -52,7 +53,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
-    const prevVnode = vm._vnode
+    const prevVnode = vm._vnode // 父类vnode
     const prevActiveInstance = activeInstance
     activeInstance = vm
     vm._vnode = vnode

@@ -189,6 +189,7 @@ export function createPatchFunction (backend) {
         }
       } else {
         createChildren(vnode, children, insertedVnodeQueue)
+        // 创建子元素数组 里面又调用了createElm 普通vnode就在这里插入到父类了
         if (isDef(data)) {
           invokeCreateHooks(vnode, insertedVnodeQueue)
         }
@@ -212,6 +213,7 @@ export function createPatchFunction (backend) {
     if (isDef(i)) {
       const isReactivated = isDef(vnode.componentInstance) && i.keepAlive
       if (isDef(i = i.hook) && isDef(i = i.init)) {
+        // 生成组件子类，
         i(vnode, false /* hydrating */)
       }
       // after calling the init hook, if the vnode is a child component
@@ -220,6 +222,7 @@ export function createPatchFunction (backend) {
       // in that case we can just return the element and be done.
       if (isDef(vnode.componentInstance)) {
         initComponent(vnode, insertedVnodeQueue)
+        // 组件这里插入到fu类
         insert(parentElm, vnode.elm, refElm)
         if (isTrue(isReactivated)) {
           reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm)
@@ -683,6 +686,10 @@ export function createPatchFunction (backend) {
   }
   
   // 最终返回方法
+  //oldVnode 表示旧的 VNode 节点，它也可以不存在或者是一个 DOM 对象；
+  //vnode 表示执行 _render 后返回的 VNode 的节点；
+  //hydrating 表示是否是服务端渲染；
+  //removeOnly 是给 transition-group 用的
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)
@@ -695,6 +702,7 @@ export function createPatchFunction (backend) {
     if (isUndef(oldVnode)) {
       // empty mount (likely as component), create new root element
       isInitialPatch = true
+      // 调用createElment的时候会去判断vnode是什么类型（原生的或者组件的）,然后（组件）生成子类对象
       createElm(vnode, insertedVnodeQueue)
     } else {
       const isRealElement = isDef(oldVnode.nodeType)
